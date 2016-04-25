@@ -56,7 +56,7 @@ module.exports = {
               type: "string"
             type:
               description: "Attribute type: number or string"
-              type: "string"
+              type: "number"
             unit:
               description: "Attribute unit"
               type: "string"
