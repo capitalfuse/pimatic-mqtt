@@ -1,7 +1,22 @@
 
 # pimatic-mqtt
 
-Pimatic Plugin for Mqtt
+[![npm version](https://badge.fury.io/js/pimatic-mqtt.png)](https://badge.fury.io/js/pimatic-mqtt)
+
+MQTT plugin for <a href="https://pimatic.org">Pimatic</a>
+
+## Screenshots
+[![Screenshot 1][screen1_thumb]](https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen1.png)
+[![Screenshot 2][screen2_thumb]](https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen2.png)
+[![Screenshot 3][screen3_thumb]](https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen3.png)
+[![Screenshot 4][screen4_thumb]](https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen4.png)
+[![Screenshot 5][screen5_thumb]](https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen5.png)
+
+[screen1_thumb]: https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen1_thumb.png?v=1
+[screen2_thumb]: https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen2_thumb.png?v=1
+[screen3_thumb]: https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen3_thumb.png?v=1
+[screen4_thumb]: https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen4_thumb.png?v=1
+[screen5_thumb]: https://github.com/wutu/pimatic-mqtt/raw/master/assets/screens/screen5_thumb.png?v=1
 
 ## Status of implementation
 
@@ -9,7 +24,8 @@ This version supports the following
 
 * General sensor (numeric and text data from payload)
 * Switch
-* PresenceSensor, ContactSensor
+* PresenceSensor
+* ContactSensor
 * Dimmer
 * Buttons
 
@@ -30,20 +46,40 @@ Full config
 
     {
       "plugin": "mqtt",
-      "host": "127.0.0.1",
+      "host": "broker.lan",
       "port": 1883,
+      "keepalive": 180,
+      "clientId": "Pimatic_B",
+      "protocolId": "MQTT",
+      "protocolVer": 4,
+      "reconnect": 5000,
+      "timeout": 30000,
       "username": "test",
-      "password": "test"
+      "password": "mqtt"
+      "certPath": "/home/user/ca.crt"
+      "keyPath": "/home/user/ca.key"
+      "rejectUnauthorized": true
+      "ca": "/home/user/ca.pem"
     }
 
 The configuration for a broker is an object comprising the following properties.
 
-| Property  | Default     | Type    | Description                                                                           |
-|:----------|:------------|:--------|:--------------------------------------------------------------------------------------|
-| host      | "127.0.0.1" | String  | Broker hostname or IP                                                                 |
-| port      | 1883        | integer | Broker port                                                                           |
-| username  | -           | String  | The login name                                                                        |
-| password  | -           | String  | The Password                                                                          |
+| Property            | Default     | Type    | Description                                                                             |
+|:--------------------|:------------|:--------|:----------------------------------------------------------------------------------------|
+| host                | "127.0.0.1" | String  | Broker hostname or IP                                                                   |
+| port                | 1883        | Integer | Broker port                                                                             |
+| keepalive           | 180         | Integer | Keepalive in seconds                                                                    |
+| clientId            | pimatic*    | String  | *pimatic + random number generation                                                     |
+| protocolId          | "MQTT"      | String  | With broker that supports only MQTT 3.1 (not 3.1.1 compliant), you should pass "MQIsdp" |
+| protocolVer         | 4           | Integer | With broker that supports only MQTT 3.1 (not 3.1.1 compliant), you should pass 3        |
+| reconnect           | 5000        | Integer | Reconnect period in milliseconds                                                        |
+| timeout             | 30000       | Integer | Connect timeout in milliseconds                                                         |
+| username            | -           | String  | The login name                                                                          |
+| password            | -           | String  | The Password                                                                            |
+| certPath            | -           | String  | Path to the certificate of the client in PEM format, required for TLS connection        |
+| keyPath             | -           | String  | Path to the key of the client in PEM format, required for TLS connection                |
+| rejectUnauthorized  | true        | String  | Whether to reject self signed certificates                                              |
+| ca                  | -           | String  | Path to the trusted CA list                                                             |
 
 
 ## Device Configuration
@@ -53,29 +89,7 @@ Devices must be added manually to the device section of your pimatic config.
 ### Generic sensor
 
 `MqttSensor` is based on the Sensor device class. Handles numeric and text data from the payload.
-Code comes from the module pimatic-mqtt-simple. The author is Andre Miller (https://github.com/andremiller).
-Also supports lookup table to translate received message to another value.
 
-    {
-      "name": "Mosquitto MQTT broker",
-      "id": "mosquitto",
-      "class": "MqttSensor",
-      "attributes": [
-        {
-          "name": "connected-clients",
-          "topic": "$SYS/broker/clients/connected",
-          "type": "number",
-          "acronym": "Clients"
-        },
-        {
-          "name": "ram-usage",
-          "topic": "$SYS/broker/heap/current",
-          "type": "number",
-          "unit": "B",
-          "acronym": "RAM usage"
-        }
-      ]
-    },
     {
       "name": "Soil Hygrometer analog reading",
       "id": "wemosd1r2-2",
@@ -90,26 +104,60 @@ Also supports lookup table to translate received message to another value.
       ]
     },
     {
-      "name": "ESP8266 12E monitoring",
-      "id": "esp8266-12",
+      "name": "ESP01 with battery",
+      "id": "esp01",
       "class": "MqttSensor",
       "attributes": [
         {
-          "name": "uptime",
-          "topic": "esp8266/system/uptime",
+          "name": "temperature",
+          "topic": "myhome/firstfloor/office/esp01/dht11/temperature",
           "type": "number",
-          "unit": "m",
-          "acronym": "Uptime"
+          "unit": "°C",
+          "acronym": "DHT-11-Temperature"
         },
         {
-          "name": "wifi-rssi",
-          "topic": "esp8266/system/wifi-rssi",
+          "name": "humidity",
+          "topic": "myhome/firstfloor/office/esp01/dht11/humidity",
           "type": "number",
-          "unit": "dB",
-          "acronym": "WiFi-RSSI"
+          "unit": "%",
+          "acronym": "DHT-11-Humidity"
         }
       ]
     },
+    {
+      "name": "Mosquitto",
+      "id": "mosquitto",
+      "class": "MqttSensor",
+      "attributes": [
+        {
+          "name": "connected-clients",
+          "topic": "$SYS/broker/clients/connected",
+          "type": "number",
+          "acronym": "Clients",
+          "discrete": true
+        },
+        {
+          "name": "ram-usage",
+          "topic": "$SYS/broker/heap/current",
+          "type": "number",
+          "unit": "B",
+          "acronym": "RAM usage"
+        }
+      ],
+      "xAttributeOptions": [
+        {
+          "name": "connected-clients",
+          "displaySparkline": false
+        },
+        {
+          "name": "ram-usage",
+          "displaySparkline": false
+        }
+      ]
+    }
+
+Supports lookup table to translate received message to another value.
+
     {
       "name": "Sensor with lookup",
       "id": "sensor-with-lookup",
@@ -126,6 +174,56 @@ Also supports lookup table to translate received message to another value.
             "1": "Ready",
             "2": "Completed"
           }
+        }
+      ]
+    }
+
+Accepts flat JSON message
+
+Sample mqtt message: {"rel_pressue": "30.5015", "wind_ave": "0.00", "rain": "0", "rainin": "0", "hum_in": "64", "temp_in_f": "66.4", "dailyrainin": "0", "wind_dir": "225", "temp_in_c": "19.1", "hum_out": "81", "dailyrain": "0", "wind_gust": "0.00", "idx": "2015-10-22 21:41:03", "temp_out_f": "49.6", "temp_out_c": "9.8"}
+
+    {
+      "class": "MqttSensor",
+      "id": "weatherstation",
+      "name": "Weather Station",
+      "attributes": [
+        {
+          "name": "temp_in_c",
+          "topic": "weatherstation",
+          "type": "number",
+          "unit": "c",
+          "acronym": "Inside Temperature"
+        },
+        {
+          "name": "temp_out_c",
+          "topic": "weatherstation",
+          "type": "number",
+          "unit": "c",
+          "acronym": "Outside Temperature"
+        }
+      ]
+    }
+
+Accepts JSON message with hierarchy
+
+Sample mqtt message: {"kodi_details": {"title": "", "fanart": "", "label": "The.Victorias.Secret.Fashion.Show.2015.720p.HDTV.x264.mkv", "type": "unknown", "streamdetails": {"video": [{"stereomode": "", "width": 1280, "codec": "h264", "aspect": 1.7777780294418335, "duration": 2537, "height": 720}], "audio": [{"channels": 6, "codec": "ac3", "language": ""}], "subtitle": [{"language": ""}]}}, "val": ""}
+
+    {
+      "name": "Kodi media info",
+      "id": "kodi-media-info",
+      "class": "MqttSensor",
+      "attributes": [
+        {
+          "name": "kodi_details.label",
+          "topic": "kodi/status/title",
+          "type": "string",
+          "acronym": "label"
+        },
+        {
+          "name": "kodi_details.streamdetails.video.0.codec",
+          "topic": "kodi/status/title",
+          "type": "string",
+          "acronym": "codec"
         }
       ]
     }
@@ -251,7 +349,7 @@ It has the following configuration properties:
 | Property   | Default  | Type    | Description                                 |
 |:-----------|:---------|:--------|:--------------------------------------------------|
 | topic      | -        | String  | Topic for control dimmer brightness.             |
-| resolution | 256      | Number  | Resolution of this dimmer. For percent set 101. |
+| resolution | 256      | Integer | Resolution of this dimmer. For percent set 101. |
 
 The Dimmer Action Provider:
 
@@ -319,10 +417,11 @@ sudo /etc/init.d/mosquitto start
 
 ## To Do
 
+- [ ] Add RGB device
 - [x] Reflecting external condition for dimmer
 - [x] Reflecting external condition for buttons
 - [ ] QoS
-- [ ] Processing JSON-encoded object
+- [x] Processing JSON-encoded object
 - [x] Make payload configurable for all device
 - [x] Buttons Device
 - [x] Configurable PWM range for Dimmer
@@ -331,10 +430,13 @@ sudo /etc/init.d/mosquitto start
 - [ ] Sending all variables from Pimatic to Broker/s
 - [ ] Control Pimatic over MQTT
 - [x] Integration with ActionProvider
+- [x] TLS support
+- [ ] Add shutter device
+- [ ] Add variable input device
 
 ## Credits
 
-<a href="https://github.com/sweetpi">sweet pi</a> for his work on best automatization software <a href="http://pimatic.org/">Pimatic</a> and all men from the pimatic community.
+<a href="https://github.com/sweetpi">sweet pi</a> for his work on best automatization software <a href="http://pimatic.org/">Pimatic</a> and all guys from the pimatic community.
 
 <a href="https://github.com/andremiller">Andre Miller</a> for for his module <a href="https://github.com/andremiller/pimatic-mqtt-simple/">pimatic-mqtt-simple</a> from which it comes also part of the code.
 

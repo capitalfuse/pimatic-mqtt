@@ -11,10 +11,11 @@
     "mqtt-config-schema.coffee",
     "device-config-schema.coffee",
     "devices",
+    "predicates_and_actions",
     "README.md",
     "LICENSE"
   ],
-  "version": "0.8.4",
+  "version": "0.8.10",
   "homepage": "http://github.com/wutu/pimatic-mqtt",
   "repository": {
     "type": "git",
@@ -22,10 +23,11 @@
   },
   "configSchema": "mqtt-config-schema.coffee",
   "peerDependencies": {
-    "pimatic": "0.8.*"
+    "pimatic": ">=0.8.0 <1.0.0"
   },
   "dependencies": {
-    "mqtt": ">=1.1.x"
+    "mqtt": ">=1.1.x",
+    "flat": ">=2.0.0"
   },
   "engines": {
     "node": ">0.8.x",
