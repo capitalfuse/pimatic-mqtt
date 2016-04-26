@@ -1,7 +1,7 @@
 module.exports = (env) ->
 
   Promise = env.require 'bluebird'
-  flatten = require 'flat'
+
 
   # Code comes from the module pimatic-mqtt-simple. The author is Andre Miller (https://github.com/andremiller).
   class MqttSensor extends env.devices.Sensor
@@ -26,18 +26,7 @@ module.exports = (env) ->
             if attr.topic == topic
               # payload = message.toString()
               @mqttvars[topic] = message.toString()
-              # try data = JSON.parse(message)
-              try data = flatten JSON.parse(message)
-              if typeof data is 'object' then for key, value of data
-                if key == attr.name
-                  if attr.type == 'number'
-                    if attr.division
-                      @emit attr.name, Number("#{value}") / attr.division
-                    else
-                      @emit attr.name, Number("#{value}")
-                  else
-                    @emit attr.name, "#{value}"
-              else
+              
                 if attr.type == 'number'
                   if attr.division
                     @emit attr.name, Number(message) / attr.division
