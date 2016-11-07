@@ -1,5 +1,5 @@
 
-# pimatic-mqtt
+# pimatic-mqtt 
 
 [![npm version](https://badge.fury.io/js/pimatic-mqtt.png)](https://badge.fury.io/js/pimatic-mqtt)
 
@@ -29,7 +29,7 @@ This version supports the following
 * Dimmer
 * Buttons
 
-## Getting Started
+## Getting Started add comment takanobu fuse
 
 This section is still work in progress.
 
