@@ -1,0 +1,38 @@
+From c50cd5d5a78645f1122bcd8c97b354b1720b8963 Mon Sep 17 00:00:00 2001
+From:  è×úV <>
+Date: Tue, 26 Apr 2016 20:39:48 +0900
+Subject: [PATCH] Update package.json
+
+---
+ package.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package.json b/package.json
+index ebf48c7..5e572ea 100644
+--- a/package.json
++++ b/package.json
+@@ -21,19 +21,19 @@
+     "type": "git",
+     "url": "git://github.com/capitalfuse/pimatic-mqtt.git"
+   },
+   "configSchema": "mqtt-config-schema.coffee",
+   "peerDependencies": {
+-    "pimatic": ">=0.8.0 <1.0.0"
++    "pimatic": ">=0.9.0 <1.0.0"
+   },
+   "dependencies": {
+     "mqtt": ">=1.1.x",
+     "flat": ">=2.0.0"
+   },
+   "engines": {
+     "node": ">=4.4.x",
+-    "npm": ">=2.1.x"
++    "npm": ">=2.15.x"
+   },
+   "bugs": {
+     "url": "https://github.com/capitalfuse/pimatic-mqtt/issues"
+   },
+   "keywords": [
+--
+libgit2 0.24.0
+
