@@ -1,8 +1,13 @@
 {
   "name": "pimatic-mqtt",
   "description": "MQTT support for Pimatic",
+<<<<<<< HEAD
   "author_name": "Takanobu Fuse",
   "author": "Marek Kail",
+=======
+  "author_name": "Marek Kail",
+  "author": "Takanobu Fuse",
+>>>>>>> 76030d2d2ba1c1e2cd2e5902cb6f859dcbd1a508
   "author_url": "https://github.com/capitalfuse",
   "npmUser": "wutu",
   "main": "mqtt",
@@ -15,7 +20,11 @@
     "README.md",
     "LICENSE"
   ],
+<<<<<<< HEAD
   "version": "0.8.10",
+=======
+  "version": "0.8.4",
+>>>>>>> 76030d2d2ba1c1e2cd2e5902cb6f859dcbd1a508
   "homepage": "http://github.com/capitalfuse/pimatic-mqtt",
   "repository": {
     "type": "git",
@@ -23,7 +32,11 @@
   },
   "configSchema": "mqtt-config-schema.coffee",
   "peerDependencies": {
+<<<<<<< HEAD
     "pimatic": ">=0.9.0 <1.0.0"
+=======
+    "pimatic": "0.9.*"
+>>>>>>> 76030d2d2ba1c1e2cd2e5902cb6f859dcbd1a508
   },
   "dependencies": {
     "mqtt": ">=1.1.x",
@@ -48,11 +61,15 @@
   "_npmVersion": "2.1.5",
   "_nodeVersion": "0.10.24",
   "_npmUser": {
-    "name": "wutu",
-    "email": "reg@kail.cz"
+    "name": "capitalfuse",
+    "email": "capitalfuse@gmail.com"
   },
   "maintainers": [
+<<<<<<< HEAD
     "wutu (https://github.com/capitalfuse)"
+=======
+    "capitalfuse (https://github.com/capitalfuse)"
+>>>>>>> 76030d2d2ba1c1e2cd2e5902cb6f859dcbd1a508
   ],
   "devDependencies": {},
   "scripts": {
